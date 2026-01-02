@@ -117,7 +117,7 @@ export function TicTacToe() {
       }
     }
     return (
-      <div key={idx}>
+      <div key={idx} style={{ marginLeft: "auto", marginRight: "auto" }}>
         <button onClick={() => jumpInHistory(idx)}>{description}</button>
       </div>
     );
