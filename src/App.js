@@ -82,7 +82,7 @@ function calculateWinner(squares) {
   return null;
 }
 
-export function Game() {
+export function TicTacToe() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const currentSquares = history[currentMove];
@@ -125,11 +125,17 @@ export function Game() {
 
   return (
     <div className="game">
-      <div className="game-board">
+      <div style={{ marginTop: "auto", marginBottom: "auto" }}>
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
-      <div className="game-info">
-        <ol>{historyStates}</ol>
+      <div
+        style={{
+          marginLeft: "0.5rem",
+          display: "flex",
+          flexDirection: "column-reverse",
+        }}
+      >
+        {historyStates}
       </div>
     </div>
   );
