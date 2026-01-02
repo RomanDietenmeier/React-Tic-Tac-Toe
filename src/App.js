@@ -13,9 +13,9 @@ function Board({ xIsNext, squares, onPlay }) {
   let status;
 
   if (winner) {
-    status = "Winner: " + winner;
+    status = "Sieger: " + winner;
   } else {
-    status = "Next player: " + (xIsNext ? "X" : "O");
+    status = "Nächster: " + (xIsNext ? "X" : "O");
   }
 
   function handleSquareClick(i) {
@@ -101,7 +101,7 @@ export function TicTacToe() {
   const historyStates = history.map((_, idx) => {
     let description;
     if (idx <= 0) {
-      description = "#0 Game Start";
+      description = "#0 Start";
     } else {
       const [fieldX, fieldY, player] = getHistoryChange(
         history[idx - 1],
@@ -111,9 +111,9 @@ export function TicTacToe() {
 
       const winner = calculateWinner(history[idx]);
       if (winner) {
-        description += " win";
+        description += " Sieg";
       } else if (idx == 9) {
-        description += " draw";
+        description += " Remis";
       }
     }
     return (
@@ -133,6 +133,7 @@ export function TicTacToe() {
           marginLeft: "0.5rem",
           display: "flex",
           flexDirection: "column-reverse",
+          minWidth: "7.1875rem",
         }}
       >
         {historyStates}
