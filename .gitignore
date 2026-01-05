@@ -1,2 +1,6 @@
 build/
 node_modules/
+out/
+out_jpg/
+out_neato_svg/
+out_normal_svg/
