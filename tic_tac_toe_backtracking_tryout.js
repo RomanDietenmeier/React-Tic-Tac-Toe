@@ -173,6 +173,9 @@ function get_best_moves(field, player, first_idx = -1) {
     }
   }
   for (idx of getShuffledFieldIteration()) {
+    if (field_copy[idx] != "-") {
+      continue;
+    }
     field_copy[idx] = player;
     const res = get_best_moves(
       field_copy,
