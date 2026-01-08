@@ -1,5 +1,13 @@
 let field = ["-", "-", "-", "-", "-", "-", "-", "-", "-"];
-
+field[4] = "X";
+field[0] = "O";
+field[6] = "X";
+field[2] = "O";
+field[1] = "X";
+field[7] = "O";
+field[3] = "X";
+field[5] = "O";
+field[8] = "X";
 function rotate_field(field) {
   return [
     field[6],
@@ -104,23 +112,24 @@ function field_to_str(field) {
 function find_winning_idices(field) {
   const idices = [];
   for (line of lines) {
-    const map = { X: 0, Y: 0 };
+    const map = { X: 0, O: 0 };
     for (let i = 0; i < 3; i++) {
       if (field[line[i]] == "X") {
         map["X"] = map["X"] + 1;
-      } else if (field[line[i]] == "Y") {
-        map["Y"] = map["Y"] + 1;
+      } else if (field[line[i]] == "O") {
+        map["O"] = map["O"] + 1;
       } else {
         map["missing_idx"] = line[i];
       }
     }
 
-    if (map["X"] >= 2) {
+    if (map["X"] >= 2 && map["O"] <= 0) {
       idices.push(["X", map["missing_idx"]]);
-    } else if (map["Y"] >= 2) {
-      idices.push(["Y", map["missing_idx"]]);
+    } else if (map["O"] >= 2 && map["X"] <= 0) {
+      idices.push(["O", map["missing_idx"]]);
     }
   }
+  //   console.log("idices", idices, "field", field);
   return idices;
 }
 
@@ -137,28 +146,42 @@ function getShuffledFieldIteration() {
   return array;
 }
 
-function get_best_moves(field, player, last_idx = -1) {
+// let count = 0;
+function get_best_moves(field, player, first_idx = -1) {
+  //   console.log("count", count++);
+
   const game_over = is_game_over(field);
   if (game_over != null) {
-    return [game_over, last_idx];
+    return [game_over, first_idx, field];
   }
   const winning_idices = find_winning_idices(field);
   const field_copy = structuredClone(field);
-  const next_player = player == "X" ? "X" : "O";
+  const next_player = player == "X" ? "O" : "X";
 
   if (winning_idices.length >= 0) {
     for ([winning_player, idx] of winning_idices) {
       if (winning_player == player) {
-        return [winning_player, idx];
+        return [winning_player, first_idx == -1 ? idx : first_idx, field];
       }
       field_copy[idx] = player;
-      return get_best_moves(field_copy, next_player);
+      const res = get_best_moves(
+        field_copy,
+        next_player,
+        first_idx == -1 ? idx : first_idx
+      );
+      return res;
     }
   }
   for (idx of getShuffledFieldIteration()) {
     field_copy[idx] = player;
-    return get_best_moves(field_copy, next_player, idx);
+    const res = get_best_moves(
+      field_copy,
+      next_player,
+      first_idx == -1 ? idx : first_idx
+    );
+    return res;
   }
 }
 
+console.log("field", field);
 console.log("get_best_moves()", get_best_moves(field, "X"));
