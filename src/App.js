@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { get_bot_move, translate_react_field } from "./bot.js";
 
 function Square({ value, onSquareClick }) {
   return (
@@ -19,7 +20,7 @@ function Board({ xIsNext, squares, onPlay }) {
   }
 
   function handleSquareClick(i) {
-    if (squares[i] || calculateWinner(squares)) {
+    if (squares[i] || calculateWinner(squares) || xIsNext) {
       return;
     }
     const nextSquares = squares.slice();
@@ -122,6 +123,38 @@ export function TicTacToe() {
       </div>
     );
   });
+
+  useEffect(() => {
+    if (!xIsNext) {
+      return;
+    }
+    const [probable_winner, idx, field] = get_bot_move(
+      translate_react_field(currentSquares)
+    );
+    if (idx < 0) {
+      return;
+    }
+    console.log(
+      "probable_winner",
+      probable_winner,
+      "idx",
+      idx,
+      "field",
+      field,
+      history.length
+    );
+
+    const nextSquares = currentSquares.slice();
+    nextSquares[idx] = "X";
+
+    if (history.length <= 1) {
+      handlePlay(nextSquares);
+    } else {
+      setTimeout(() => {
+        handlePlay(nextSquares);
+      }, 250);
+    }
+  }, [xIsNext]);
 
   return (
     <div className="game">
