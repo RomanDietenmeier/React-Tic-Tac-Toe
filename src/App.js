@@ -154,7 +154,7 @@ export function TicTacToe() {
         handlePlay(nextSquares);
       }, 250);
     }
-  }, [xIsNext]);
+  }, [xIsNext, currentSquares]);
 
   return (
     <div className="game">
